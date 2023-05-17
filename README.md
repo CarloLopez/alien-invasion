@@ -15,7 +15,10 @@ loses a ship. If the player loses three ships, the game ends.
 
 Project was completed as with guidance from "Python Crash Course"
 
-Planned additions of my owm:
+Requires python and pygame. You can install pygame through the terminal by typing:
+> pip install pygame
+
+**Planned additions of my own:**
 * Difficulty Settings
 * Powerups
 * Aliens shooting
