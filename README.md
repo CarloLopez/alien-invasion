@@ -13,8 +13,10 @@ If any alien hits
 the player’s ship or reaches the bottom of the screen, the player
 loses a ship. If the player loses three ships, the game ends.
 
-Planned Additions:
-    Difficulty Settings
-    Powerups
-    Aliens shooting
-    SFX
+Project was completed as with guidance from "Python Crash Course"
+
+Planned additions of my owm:
+* Difficulty Settings
+* Powerups
+* Aliens shooting
+* SFX
