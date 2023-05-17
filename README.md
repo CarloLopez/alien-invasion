@@ -16,3 +16,4 @@ loses a ship. If the player loses three ships, the game ends.
 Planned Additions:
 Difficulty Settings
 Powerups
+Aliens shooting
