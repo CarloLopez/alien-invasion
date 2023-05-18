@@ -6,6 +6,7 @@ When the game begins, a fleet of aliens fills the sky and moves across and down 
 If any alien hits the player’s ship or reaches the bottom of the screen, the player loses a ship. If the player loses three ships, the game ends.
 
 Requires python and pygame. You can install pygame through the terminal using the following command:
+
 ```py -m pip install -U pygame --user```
 
 Project was initially completed with guidance from "Python Crash Course" by Eric Matthes. I have expanded upon the projects features with my own additions.
