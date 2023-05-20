@@ -20,6 +20,9 @@ class Settings:
 
         # Alien settings
         self.fleet_drop_speed = 10
+
+        # Powerup settings
+        self.powerup_drop_speed = 2.5
         
         self.initialise_difficulty_settings()
         self.initialise_dynamic_settings()
@@ -39,24 +42,24 @@ class Settings:
             # Multiplier to determine maximum alien bullets raining down
             self.max_alien_bullet_factor = 8
             # Interval timer for frequency of aliens shooting bullets at player (ms)
-            self.alien_bullet_interval = 3000
+            self.alien_bullet_interval = 2500
         else:
             self.ship_limit = 1
             self.alien_bullet_speed = 5
             self.speedup_scale = 1.25
             self.score_scale = 2
             self.max_alien_bullet_factor = 4
-            self.alien_bullet_interval = 1500
+            self.alien_bullet_interval = 1250
 
     def initialise_dynamic_settings(self):
         """Initialise settings that change throughout the game"""
         self.ship_speed = 5
-        self.bullet_speed = 5
         self.alien_speed = 1.5
 
         # Dynamic bullet settings
-        self.ship_bullet_width = 6
-        self.ship_bullet_height = 15
+        self.bullet_speed = 5
+        self.ship_bullet_width = 4
+        self.ship_bullet_height = 12
         self.bullets_allowed = 3
 
         # fleet direction of 1 represents right; -1 represents left

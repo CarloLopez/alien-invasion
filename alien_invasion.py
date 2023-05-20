@@ -11,6 +11,7 @@ from button import NormalButton, HardModeButton
 from ship import Ship
 from bullet import ShipBullet, AlienBullet
 from alien import Alien
+from powerup import BulletExpansion, HealthUp, SpeedUp
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour"""
@@ -33,6 +34,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.alienbullets = pygame.sprite.Group()
+        self.powerups = pygame.sprite.Group()
 
         self._create_fleet()
 
@@ -46,21 +48,22 @@ class AlienInvasion:
     def run_game(self):
         """Start the main loop for the game"""
 
-        ALIEN_BULLET_EVENT = pygame.USEREVENT + 1
-        pygame.time.set_timer(ALIEN_BULLET_EVENT, self.settings.alien_bullet_interval)
+        TIMED_EVENT = pygame.USEREVENT + 1
+        pygame.time.set_timer(TIMED_EVENT, self.settings.alien_bullet_interval)
 
         while True:
-            self._check_events(ALIEN_BULLET_EVENT)
+            self._check_events(TIMED_EVENT)
 
             if self.game_active:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
+                self._update_powerups()
             
             self._update_screen()
             self.clock.tick(60)
 
-    def _check_events(self, ALIEN_BULLET_EVENT):
+    def _check_events(self, TIMED_EVENT):
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -73,8 +76,9 @@ class AlienInvasion:
                     mouse_pos = pygame.mouse.get_pos()
                     self._check_play_button(mouse_pos)
                 
-                if (self.game_active == True) and (event.type == ALIEN_BULLET_EVENT):
+                if (self.game_active == True) and (event.type == TIMED_EVENT):
                     self.fire_alien_bullets()
+                    self._roll_powerup()
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
@@ -161,6 +165,20 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = ShipBullet(self)
             self.bullets.add(new_bullet)
+
+    def _spawn_powerup(self):
+        """Create a random powerup at a random horizonal location at the top of the screen."""
+
+        rand_num = randint(1, 3)
+
+        if rand_num == 1:
+            spawned_powerup = BulletExpansion(self)
+        elif rand_num == 2:
+            spawned_powerup = HealthUp(self)
+        else:
+            spawned_powerup = SpeedUp(self)
+        
+        self.powerups.add(spawned_powerup)
     
     def _update_bullets(self):
         """Update the position of bullets to get rid of old bullets."""
@@ -178,6 +196,31 @@ class AlienInvasion:
 
         self._check_bullet_ship_collisions()
         self._check_bullet_alien_collisions()
+
+    def _update_powerups(self):
+        """Update the position of powerups"""
+        self.powerups.update()
+
+        # Check for any powerups that have passed the bottom of the screen.
+        self._check_powerups_bottom()
+
+        # Look for any collisions with the powerup and the player ship.
+        self._check_powerup_ship_collisions()
+
+    def _check_powerup_ship_collisions(self):
+        """Respond to any collisions between powerups and the player ship."""
+
+        # Remove powerups that have collided and grant powerup to player
+        for powerup in self.powerups:
+            if powerup.rect.colliderect(self.ship.rect):
+                powerup._grant_powerup()
+                self.powerups.remove(powerup)
+
+    def _roll_powerup(self):
+        """10% Chance to spawn a powerup when method called"""
+        powerup_rand = randint(1, 10)
+        if powerup_rand == 10:
+            self._spawn_powerup()
 
     def _check_bullet_alien_collisions(self):
         """Respond to any bullet collisions from the player."""
@@ -219,10 +262,10 @@ class AlienInvasion:
         # Look for aliens hitting the bottom of the screen.
         self._check_aliens_bottom()
 
-    def _cycle_alien_bullets(self, ALIEN_BULLET_EVENT):
+    def _cycle_alien_bullets(self, TIMED_EVENT):
 
         for event in pygame.event.get():
-            if event.type == ALIEN_BULLET_EVENT:
+            if event.type == TIMED_EVENT:
                 self.fire_alien_bullets()
 
     def _ship_hit(self):
@@ -237,6 +280,7 @@ class AlienInvasion:
             self.bullets.empty()
             self.alienbullets.empty()
             self.aliens.empty()
+            self.powerups.empty()
 
             # Create a new fleet and center the ship.
             self._create_fleet()
@@ -256,6 +300,12 @@ class AlienInvasion:
                 self._ship_hit()
                 break
     
+    def _check_powerups_bottom(self):
+        """Check if any powerups have reached the bottom of the screen"""
+        for powerup in self.powerups.sprites():
+            if powerup.rect.top >= self.settings.screen_height:
+                self.powerups.remove(powerup)
+
     def _create_fleet(self):
         """Create the fleet of aliens."""
         # Create an alien and keep adding aliens until there's no room left.
@@ -301,6 +351,7 @@ class AlienInvasion:
             bullet.draw_bullet()
         for bullet in self.alienbullets.sprites():
             bullet.draw_bullet()
+        self.powerups.draw(self.screen)
         self.ship.blitme()
         self.aliens.draw(self.screen)
 

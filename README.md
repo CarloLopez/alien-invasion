@@ -7,15 +7,15 @@ If any alien hits the player’s ship or reaches the bottom of the screen, the p
 
 Requires python and pygame. You can install pygame through the terminal using the following command:
 
-```py -m pip install -U pygame --user```
+``` py -m pip install -U pygame --user  ```
 
 Project was initially completed with guidance from "Python Crash Course" by Eric Matthes. I have expanded upon the projects features with my own additions.
 
 # Additional Features
 **Below is a list of additional features I have added to expand upon the work of the original project:**
-* Difficulty Settings - Normal and Hardmode (Complete)
+* Difficulty Settings - Normal and Hardmode - (Complete)
 * Aliens randomly shooting back at player - (Complete)
-* Collectible player powerups
+* Collectible random player powerups - (Complete)
 * SFX
 * Moving stars background
 * High score persistent save through .json
