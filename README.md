@@ -16,6 +16,5 @@ Project was initially completed with guidance from "Python Crash Course" by Eric
 * Difficulty Settings - Normal and Hardmode - (Complete)
 * Aliens randomly shooting back at player - (Complete)
 * Collectible random player powerups - (Complete)
-* SFX
-* Moving stars background
-* High score persistent save through .json
+* Background and SFX - (Complete)
+* High score persistent save through .json - (Complete)

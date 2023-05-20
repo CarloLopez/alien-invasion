@@ -50,6 +50,8 @@ class BulletExpansion(Powerup):
         self.settings.ship_bullet_height += 0.25
         self.settings.bullets_allowed += 1
         self.settings.bullet_speed += 0.25
+        sfx = pygame.mixer.Sound("music/gun_powerup.wav")
+        pygame.mixer.Sound.play(sfx)
 
 class HealthUp(Powerup):
     """A class for powerup that restores ship lives, if below max"""
@@ -68,6 +70,11 @@ class HealthUp(Powerup):
         if self.stats.ships_left < self.settings.ship_limit:
             self.stats.ships_left += 1
             self.sb.prep_ships()
+            sfx = pygame.mixer.Sound("music/health_up.wav")
+        else:
+            sfx = pygame.mixer.Sound("music/health_up_false.wav")
+        pygame.mixer.Sound.play(sfx)
+
 
 class SpeedUp(Powerup):
     """A class for powerup that increases ship movement speed"""
@@ -84,3 +91,5 @@ class SpeedUp(Powerup):
     
     def _grant_powerup(self):
         self.settings.ship_speed += 0.25
+        sfx = pygame.mixer.Sound("music/speed_up.wav")
+        pygame.mixer.Sound.play(sfx)

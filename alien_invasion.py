@@ -25,6 +25,7 @@ class AlienInvasion:
         
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
+        self.bg = self.image = pygame.image.load("images/bg.bmp")
 
         # Create an instance to store game statistics and scoreboard
         self.stats = GameStats(self)
@@ -36,8 +37,6 @@ class AlienInvasion:
         self.alienbullets = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
 
-        self._create_fleet()
-
         # Start Alien Invasion in an active state.
         self.game_active = False
 
@@ -47,6 +46,8 @@ class AlienInvasion:
 
     def run_game(self):
         """Start the main loop for the game"""
+
+        pygame.mixer.music.load('music/bgm.wav')
 
         TIMED_EVENT = pygame.USEREVENT + 1
         pygame.time.set_timer(TIMED_EVENT, self.settings.alien_bullet_interval)
@@ -102,6 +103,7 @@ class AlienInvasion:
         self.settings.initialise_dynamic_settings()
 
         self.game_active = True
+        pygame.mixer.music.play(-1)
 
         # Get rid of any remaining bullets and aliens.
         self.bullets.empty()
@@ -124,9 +126,8 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE:
             if self.game_active:
                 self._fire_bullet()
-            else:
-                self._new_game()
         elif event.key == pygame.K_q:
+            self.stats.save_highscore()
             sys.exit()
 
     def _check_keyup_events(self, event):
@@ -159,12 +160,17 @@ class AlienInvasion:
             specific_alien = aliens_list[shooter]
             new_bullet = AlienBullet(self, specific_alien)
             self.alienbullets.add(new_bullet) 
-
+        
+        bulletsound = pygame.mixer.Sound("music/alien_bullet.wav")
+        pygame.mixer.Sound.play(bulletsound)
+        
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = ShipBullet(self)
             self.bullets.add(new_bullet)
+            bulletsound = pygame.mixer.Sound("music/ship_bullet.wav")
+            pygame.mixer.Sound.play(bulletsound)
 
     def _spawn_powerup(self):
         """Create a random powerup at a random horizonal location at the top of the screen."""
@@ -231,8 +237,12 @@ class AlienInvasion:
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
+                
             self.sb.prep_score()
             self.sb.check_high_score()
+
+            deathsound = pygame.mixer.Sound("music/alien_death.wav")
+            pygame.mixer.Sound.play(deathsound)
 
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
@@ -286,11 +296,20 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
 
+            deathsound = pygame.mixer.Sound("music/ship_death.wav")
+            pygame.mixer.Sound.play(deathsound)
+
             # Pause.
             sleep(0.5)
         else:
             self.game_active = False
             pygame.mouse.set_visible(True)
+            pygame.mixer.music.stop()
+
+            game_over = pygame.mixer.Sound("music/game_over.wav")
+            pygame.mixer.Sound.play(game_over)
+
+            self.stats.save_highscore()
     
     def _check_aliens_bottom(self):
         """Check if any aliens have reached the bottom of the screen."""
@@ -322,6 +341,9 @@ class AlienInvasion:
             #Finished a row; reset x value, and increment y value.
             current_x = alien_width
             current_y += 2 * alien_height
+        
+        spawn_sfx = pygame.mixer.Sound("music/alien_spawn.wav")
+        pygame.mixer.Sound.play(spawn_sfx)
 
     def _create_alien(self, x_position, y_position):
         """Create an alien and place it in the fleet."""
@@ -344,9 +366,13 @@ class AlienInvasion:
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
+    def _draw_bg(self):
+        self.screen.blit(self.bg)
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.bg, (0, 0))
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         for bullet in self.alienbullets.sprites():
