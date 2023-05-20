@@ -217,9 +217,9 @@ class AlienInvasion:
                 self.powerups.remove(powerup)
 
     def _roll_powerup(self):
-        """10% Chance to spawn a powerup when method called"""
-        powerup_rand = randint(1, 10)
-        if powerup_rand == 10:
+        """20% Chance to spawn a powerup when method called"""
+        powerup_rand = randint(1, 5)
+        if powerup_rand == 5:
             self._spawn_powerup()
 
     def _check_bullet_alien_collisions(self):
