@@ -1,20 +1,31 @@
 # Alien Invasion
-In Alien Invasion, the player controls a rocket ship that appears at the bottom center of the screen. The player can move the ship right and left using the arrow keys and shoot bullets using the spacebar. 
 
-When the game begins, a fleet of aliens fills the sky and moves across and down the screen. The player shoots and destroys the aliens. If the player destroys all the aliens, a new fleet appears that moves faster than the previous fleet. 
+## Project Overview
+"Alien Invasion" is an arcade-style game developed in Python. Players take control of a rocket ship positioned at the bottom center of the screen, using arrow keys to navigate and the spacebar to fire bullets. The primary objective is to obliterate a fleet of aliens moving across and down the screen. With each level, the game introduces a faster fleet of aliens, increasing the challenge. The game ends if an alien collides with the player's ship or reaches the bottom of the screen, with players having a life limit.
 
-If any alien hits the player’s ship or reaches the bottom of the screen, the player loses a ship. If the player loses three ships, the game ends.
+## Installation
+Ensure you have Python installed on your system. Additionally, the game requires Pygame. Install Pygame using the following command in your terminal:
 
-Requires python and pygame. You can install pygame through the terminal using the following command:
+```bash
+py -m pip install -U pygame --user
+```
+## How to Play
+- **Starting the Game**: Execute `alien_invasion.py` to begin.
+- **Controls**:
+  - **Move**: Use the left and right arrow keys.
+  - **Shoot**: Press the spacebar.
 
-``` py -m pip install -U pygame --user  ```
+## Features
+- **Difficulty Levels**: Select from Normal or Hardmode.
+- **Interactive Gameplay**: Aliens shoot back at the player randomly.
+- **Player Power-ups**: Gain random power-ups during the game.
+- **Audio and Visual Experience**: Includes background music and sound effects for an immersive experience.
+- **Persistent High Score**: High scores are saved using a .json file.
 
-Project was initially completed with guidance from "Python Crash Course" by Eric Matthes. I have expanded upon the projects features with my own additions.
-
-# Additional Features
-**Below is a list of additional features I have added to expand upon the work of the original project:**
-* Difficulty Settings - Normal and Hardmode - (Complete)
-* Aliens randomly shooting back at player - (Complete)
-* Collectible random player powerups - (Complete)
-* Background and SFX - (Complete)
-* High score persistent save through .json - (Complete)
+### Additional Features
+These features have been added to expand upon the original project from "Python Crash Course" by Eric Matthes:
+- Difficulty settings for varied gameplay experiences.
+- Aliens with the ability to shoot at the player.
+- Collectible power-ups for the player.
+- Enhanced audio and visual elements.
+- A system to save high scores persistently.
